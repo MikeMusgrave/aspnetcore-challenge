@@ -6,7 +6,7 @@ using FoodApp.Models;
 
 namespace FoodApp.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Food")]
     public class ApiController : Controller
     {
         private readonly FoodDbContext _context;
@@ -28,7 +28,7 @@ namespace FoodApp.Controllers
             return _context.FoodItems.ToList();
         }
 
-        [HttpGet("{id}", Name = "?id=")]
+        [HttpGet("{id:Guid}", Name = "GetById")]
         public IActionResult GetById(Guid id)
         {
             var item = _context.FoodItems.FirstOrDefault(t => t.Id == id);
@@ -51,10 +51,10 @@ namespace FoodApp.Controllers
             _context.FoodItems.Add(item);
             _context.SaveChanges();
 
-            return CreatedAtRoute("?id=", new { id = item.Id }, item);
+            return CreatedAtRoute("GetById", new { id = item.Id }, item);
         }
 
-        [HttpPut("{id}", Name = "?id=")]
+        [HttpPut("{id}")]
         public IActionResult Update(Guid id, [FromBody] FoodItem item)
         {
             if (item == null || item.Id != id)
@@ -79,7 +79,7 @@ namespace FoodApp.Controllers
             return new NoContentResult();
         }
 
-        [HttpDelete("{id}", Name = "?id=")]
+        [HttpDelete("{id}")]
         public IActionResult Delete(Guid id)
         {
             var food = _context.FoodItems.FirstOrDefault(t => t.Id == id);
