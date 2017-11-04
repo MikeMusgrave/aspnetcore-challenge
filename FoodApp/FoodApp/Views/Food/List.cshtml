@@ -1,0 +1,8 @@
+﻿@model IEnumerable<FoodItem>
+
+@foreach (var f in Model) {
+    <div>
+        <h3>@f.Name</h3>
+        <h4>@f.Rating.ToString()</h4>
+    </div>
+}

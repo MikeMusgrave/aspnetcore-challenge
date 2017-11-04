@@ -286,3 +286,10 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+/FoodApp/FoodApp/Controllers/ApiController.cs
+/FoodApp/FoodApp/Models/FoodContext.cs
+/FoodApp/FoodApp/Views/Food/Add.cshtml
+/FoodApp/FoodApp/Views/Food/Add.cshtml.cs
+/FoodApp/FoodApp/Views/Food/Search.cshtml
+/FoodApp/FoodApp/Views/Food/Search.cshtml.cs
+/FoodApp/FoodApp.Tests
