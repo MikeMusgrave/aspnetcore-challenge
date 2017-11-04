@@ -9,9 +9,9 @@ namespace FoodApp.Controllers
     [Route("api/[controller]")]
     public class ApiController : Controller
     {
-        private readonly FoodContext _context;
+        private readonly FoodDbContext _context;
 
-        public ApiController(FoodContext context)
+        public ApiController(FoodDbContext context)
         {
             _context = context;
 

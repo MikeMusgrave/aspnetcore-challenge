@@ -2,9 +2,9 @@
 
 namespace FoodApp.Models
 {
-    public class FoodContext : DbContext
+    public class FoodDbContext : DbContext
     {
-        public FoodContext(DbContextOptions<FoodContext> options) : base(options)
+        public FoodDbContext(DbContextOptions<FoodDbContext> options) : base(options)
         {
         }
 

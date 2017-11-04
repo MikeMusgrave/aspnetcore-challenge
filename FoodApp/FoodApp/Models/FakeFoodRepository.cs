@@ -12,7 +12,7 @@ namespace FoodApp.Models
             new FoodItem { Name = "Pumpkin Pie", Rating = RatingEnum.Unrated },
             new FoodItem { Name = "Lasagna", Rating = RatingEnum.Awesome },
             new FoodItem { Name = "Bologna", Rating = RatingEnum.Bad },
-            new FoodItem { Name = "Tripe", Rating = RatingEnum.Terrible },
+            new FoodItem { Name = "Haggis", Rating = RatingEnum.Terrible },
         };
     }
 }
