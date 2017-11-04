@@ -6,13 +6,13 @@ namespace FoodApp.Models
     {
         public IEnumerable<FoodItem> FoodItems => new List<FoodItem>
         {
-            new FoodItem { Name = "Apple", Rating = RatingEnum.Good },
-            new FoodItem { Name = "Burrito", Rating = RatingEnum.Awesome },
-            new FoodItem { Name = "Brussel Sprouts", Rating = RatingEnum.Terrible },
-            new FoodItem { Name = "Pumpkin Pie", Rating = RatingEnum.Unrated },
-            new FoodItem { Name = "Lasagna", Rating = RatingEnum.Awesome },
-            new FoodItem { Name = "Bologna", Rating = RatingEnum.Bad },
-            new FoodItem { Name = "Haggis", Rating = RatingEnum.Terrible },
+            new FoodItem { Name = "Apple", Rating = Rating.Good },
+            new FoodItem { Name = "Burrito", Rating = Rating.Awesome },
+            new FoodItem { Name = "Brussel Sprouts", Rating = Rating.Terrible },
+            new FoodItem { Name = "Pumpkin Pie", Rating = Rating.Unrated },
+            new FoodItem { Name = "Lasagna", Rating = Rating.Awesome },
+            new FoodItem { Name = "Bologna", Rating = Rating.Bad },
+            new FoodItem { Name = "Haggis", Rating = Rating.Terrible },
         };
     }
 }

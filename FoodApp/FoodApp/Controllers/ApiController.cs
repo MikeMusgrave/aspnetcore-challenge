@@ -15,19 +15,23 @@ namespace FoodApp.Controllers
         {
             _context = context;
 
-            if (_context.FoodItems.Count()==0)
+            if (_context.FoodItems.Count() == 0)
             {
                 _context.FoodItems.Add(new FoodItem { Name = "FoodItem1" });
                 _context.SaveChanges();
             }
         }
 
+        // GET everything
         [HttpGet]
         public IEnumerable<FoodItem> GetAll()
         {
             return _context.FoodItems.ToList();
         }
 
+        // GET by guid
+        // TODO: figure out /api/food/?id=<guid> parameter routing 
+        // currently uses /api/food/<guid> to get item by id
         [HttpGet("{id:Guid}", Name = "GetById")]
         public IActionResult GetById(Guid id)
         {
@@ -40,6 +44,7 @@ namespace FoodApp.Controllers
             return new ObjectResult(item);
         }
 
+        // POST new from JSON
         [HttpPost]
         public IActionResult Create([FromBody] FoodItem item)
         {
@@ -54,7 +59,8 @@ namespace FoodApp.Controllers
             return CreatedAtRoute("GetById", new { id = item.Id }, item);
         }
 
-        [HttpPut("{id}")]
+        // PUT updated item by guid
+        [HttpPut("{id:Guid}")]
         public IActionResult Update(Guid id, [FromBody] FoodItem item)
         {
             if (item == null || item.Id != id)
@@ -79,7 +85,7 @@ namespace FoodApp.Controllers
             return new NoContentResult();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:Guid}")]
         public IActionResult Delete(Guid id)
         {
             var food = _context.FoodItems.FirstOrDefault(t => t.Id == id);

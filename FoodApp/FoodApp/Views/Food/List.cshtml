@@ -1,36 +1,16 @@
 ﻿@model IEnumerable<FoodItem>
 
-@foreach (var v in Model) {
-    <div>
-        <table>
-            <tr>
-                <td><h3>@v.Name</h3></td>
-            </tr>
-            <tr>
-                <td>
-                    <table>
-                        <tr>
-                            <td><img  src="@v.URL" alt="@v.Name" height="120" width="120" /></td>
-                            <td>
-                                <table>
-                                    <tr>
-                                        <td><h3>Rating</h3></td>
-                                        <td><h4>@v.Rating.ToString()</h4></td>
-                                    </tr>
-                                    <tr>
-                                        <td><h3>E-Mail</h3></td>
-                                        <td><h4>@v.Email</h4></td>
-                                    </tr>
-                                    <tr>
-                                        <td><h3>Id</h3></td>
-                                        <td><h4>@v.Id.ToString()</h4></td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-    </div>
+@{ 
+    Layout = null;
 }
+
+<div>
+    <table>
+        @foreach (FoodItem f in Model)
+        {
+            <tr>
+                <td><a class="btn btn-link" asp-action="Detail" asp-route-id="@f.Id">@f.Name</a></td>
+            </tr>
+        }
+    </table>
+</div>
