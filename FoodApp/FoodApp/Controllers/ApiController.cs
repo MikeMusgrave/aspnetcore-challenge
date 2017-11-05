@@ -46,11 +46,7 @@ namespace FoodApp.Controllers
         public async Task<IActionResult> GetById(Guid id)
         {
             var item = await _context.FoodItems.FirstOrDefaultAsync(t => t.Id == id);
-            if (item == null)
-            {
-                return NotFound(Json(id));
-            }
-
+            
             return new ObjectResult(item);
         }
 
