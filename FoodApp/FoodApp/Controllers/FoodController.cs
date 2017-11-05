@@ -64,6 +64,7 @@ namespace FoodApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add([Bind("Name, Rating, URL, Email")]FoodItem foodItem)
         {
+            // handle action
             if (ModelState.IsValid)
             {
                 try

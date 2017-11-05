@@ -2,6 +2,7 @@
 
 @{
     Layout = "_Layout";
+    ViewData["Title"] = "Add";
 }
 
 <div class="panel panel-success">
@@ -16,7 +17,7 @@
             <div class="form-group">
                 <label asp-for="Rating">Rating:</label>
                 <select asp-for="Rating" asp-items="Html.GetEnumSelectList<Rating>()">
-                    <option selected="selected" value="">Select a Rating</option>
+                    <option selected="selected" value="">Choose...</option>
                 </select>
             </div>
             <div class="form-group">

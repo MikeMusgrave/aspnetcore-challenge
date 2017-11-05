@@ -1,27 +1,26 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using FoodApp.Validation;
 
 namespace FoodApp.Models
 {
-    public enum Rating { Unrated, Terrible, Bad, Meh, Good, Awesome };
-
     public class FoodItem
     {
         public Guid Id { get; set; }
 
-        [StringLength(60, MinimumLength = 2)]
+        [StringLength(30)]
         [Required]
         public string Name { get; set; }
 
         [StringLength(512)]
+        [RegularExpression(@"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)")]
         public string URL { get; set; }
 
-        [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage = "Please enter a valid email address")]
         [StringLength(256)]
+        [RegularExpression(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$")]
         public string Email { get; set; }
 
-        [EnumDataType(typeof(Rating), ErrorMessage = "Please choose a Rating value")]
-        [Required]
+        [ValidateEnumValue]
         public Rating Rating { get; set; }    
     }
 }

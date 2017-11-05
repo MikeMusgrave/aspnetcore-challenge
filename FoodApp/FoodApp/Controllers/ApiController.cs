@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using FoodApp.Models;
+using FoodApp.Validation;
 
 namespace FoodApp.Controllers
 {
     [Route("api/Food")]
+    [ValidateModel]
     public class ApiController : Controller
     {
         private readonly FoodDbContext _context;
@@ -17,28 +21,34 @@ namespace FoodApp.Controllers
 
             if (_context.FoodItems.Count() == 0)
             {
-                _context.FoodItems.Add(new FoodItem { Name = "FoodItem1" });
+                _context.FoodItems.Add(new FoodItem { Name = "FoodItem1", Rating = Rating.Unrated });
                 _context.SaveChanges();
             }
         }
 
-        // GET everything
+        // GET all
         [HttpGet]
-        public IEnumerable<FoodItem> GetAll()
+        [Produces("application/json")]
+        public async Task<IEnumerable<FoodItem>> Get()
         {
-            return _context.FoodItems.ToList();
+            // get food items from db
+            var foodItems = from f in _context.FoodItems select f;
+
+            // order ascending
+            foodItems = foodItems.OrderBy(f => f.Name);
+
+            return await foodItems.ToListAsync();
         }
 
         // GET by guid
-        // TODO: figure out /api/food/?id=<guid> parameter routing 
-        // currently uses /api/food/<guid> to get item by id
-        [HttpGet("{id:Guid}", Name = "GetById")]
-        public IActionResult GetById(Guid id)
+        [HttpGet("{id:Guid}", Name ="GetById")]
+        [Produces("application/json")]
+        public async Task<IActionResult> GetById(Guid id)
         {
-            var item = _context.FoodItems.FirstOrDefault(t => t.Id == id);
+            var item = await _context.FoodItems.FirstOrDefaultAsync(t => t.Id == id);
             if (item == null)
             {
-                return NotFound();
+                return NotFound(id);
             }
 
             return new ObjectResult(item);
@@ -46,58 +56,13 @@ namespace FoodApp.Controllers
 
         // POST new from JSON
         [HttpPost]
-        public IActionResult Create([FromBody] FoodItem item)
+        [Consumes("application/json")]
+        public async Task<IActionResult> Create([FromBody] FoodItem food)
         {
-            if (item == null)
-            {
-                return BadRequest();
-            }
+            _context.FoodItems.Add(food);
+            await _context.SaveChangesAsync();
 
-            _context.FoodItems.Add(item);
-            _context.SaveChanges();
-
-            return CreatedAtRoute("GetById", new { id = item.Id }, item);
-        }
-
-        // PUT updated item by guid
-        [HttpPut("{id:Guid}")]
-        public IActionResult Update(Guid id, [FromBody] FoodItem item)
-        {
-            if (item == null || item.Id != id)
-            {
-                return BadRequest();
-            }
-
-            var food = _context.FoodItems.FirstOrDefault(t => t.Id == id);
-            if (food == null)
-            {
-                return NotFound();
-            }
-
-            food.Name = item.Name;
-            food.Rating = item.Rating;
-            food.Email = item.Email;
-            food.URL = item.URL;
-
-            _context.FoodItems.Update(food);
-            _context.SaveChanges();
-
-            return new NoContentResult();
-        }
-
-        [HttpDelete("{id:Guid}")]
-        public IActionResult Delete(Guid id)
-        {
-            var food = _context.FoodItems.FirstOrDefault(t => t.Id == id);
-            if (food == null)
-            {
-                return NotFound();
-            }
-
-            _context.FoodItems.Remove(food);
-            _context.SaveChanges();
-
-            return new NoContentResult();
+            return CreatedAtRoute("GetById", new { id = food.Id }, food);
         }
     }
 }

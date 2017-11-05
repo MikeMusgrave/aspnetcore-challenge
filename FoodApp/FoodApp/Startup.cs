@@ -31,19 +31,19 @@ namespace FoodApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            //if (env.IsDevelopment())
-            //{
+            if (env.IsDevelopment())
+            {
                 app.UseDeveloperExceptionPage();
                 app.UseStatusCodePages();
                 app.UseStaticFiles();
-                //app.UseBrowserLink();
-            //}
-            //else
-            //{
-            //    app.UseExceptionHandler("/Food/Error");
-            //}
+                app.UseBrowserLink();
+            }
+            else
+            {
+                //app.UseExceptionHandler("/Food/Error");
+            }
 
-            //app.UseStaticFiles();
+            app.UseStaticFiles();
 
             app.UseMvc(routes =>
             {
