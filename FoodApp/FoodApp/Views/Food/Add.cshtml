@@ -1,4 +1,37 @@
-﻿@page
-@model AddModel
+﻿@model FoodItem
+
 @{
+    Layout = "_Layout";
 }
+
+<div class="panel panel-success">
+    <div class="panel-heading text-center"><h4>New Food Item</h4></div>
+    <div class="panel-body">
+        <form class="p-a-1" asp-action="Add" method="post">
+            <div asp-validation-summary="All"></div>
+            <div class="form-group">
+                <label asp-for="Name">Name:</label>
+                <input class="form-control" asp-for="Name" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Rating">Rating:</label>
+                <select asp-for="Rating" asp-items="Html.GetEnumSelectList<Rating>()">
+                    <option selected="selected" value="">Select a Rating</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="URL">Image URL:</label>
+                <input class="form-control" asp-for="URL" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Email">Your email:</label>
+                <input class="form-control" asp-for="Email" />
+            </div>
+            <div class="text-center">
+                <button class="btn btn-primary" type="submit">
+                    Save Food Item
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

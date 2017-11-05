@@ -17,10 +17,10 @@ namespace FoodApp.Models
         public string URL { get; set; }
 
         [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage = "Please enter a valid email address")]
-        [StringLength(256, MinimumLength = 7)]
+        [StringLength(256)]
         public string Email { get; set; }
 
-        [EnumDataType(typeof(Rating), ErrorMessage = "Rating value doesn't exist in enum")]
+        [EnumDataType(typeof(Rating), ErrorMessage = "Please choose a Rating value")]
         [Required]
         public Rating Rating { get; set; }    
     }
