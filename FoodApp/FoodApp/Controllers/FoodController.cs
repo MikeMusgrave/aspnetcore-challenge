@@ -38,7 +38,7 @@ namespace FoodApp.Controllers
                 return NotFound();
             }
 
-            return View("Details");
+            return View(food);
 
         }
 
