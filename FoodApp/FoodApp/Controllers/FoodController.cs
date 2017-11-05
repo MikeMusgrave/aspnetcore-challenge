@@ -34,7 +34,7 @@ namespace FoodApp.Controllers
             // check for passed value
             if (String.IsNullOrEmpty(id))
             {
-                return NotFound();
+                return BadRequest(id);
             }
 
             Guid.TryParse(id, out Guid guid);
@@ -45,7 +45,7 @@ namespace FoodApp.Controllers
             // if food item is empty exit
             if (food == null)
             {
-                return NotFound();
+                return NotFound(id);
             }
 
             // everything is good, show the food item's details
@@ -79,7 +79,8 @@ namespace FoodApp.Controllers
                 }
 
                 // show list
-                return RedirectToAction("List");
+                //return RedirectToAction("List");
+                return RedirectToAction("Details", new { id = foodItem.Id });
             }
             else
             {
