@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using FoodApp.Models;
 
 namespace FoodApp.Controllers
@@ -16,22 +17,31 @@ namespace FoodApp.Controllers
         }
 
         // get the main list page
-        public IActionResult List() {
-            return View(_context.FoodItems);
+        public async Task<IActionResult> List() {
+            // get food items from db
+            var foodItems = from f in _context.FoodItems select f;
+
+            // order ascending
+            foodItems = foodItems.OrderBy(f => f.Name);
+
+            return View(await foodItems.ToListAsync());
         }
 
         // get the details page
         [HttpGet]
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(string id)
         {
-            // if id has no value exit
-            if (id == null)
+            // check for passed value
+            if (String.IsNullOrEmpty(id))
             {
                 return NotFound();
             }
 
-            // wait for food item
-            var food = await _context.FoodItems.SingleOrDefaultAsync(f => f.Id == id);
+            Guid.TryParse(id, out Guid guid);
+            
+            // get food item
+            var food = await _context.FoodItems.SingleOrDefaultAsync(f => f.Id == guid);
+            
             // if food item is empty exit
             if (food == null)
             {
@@ -78,8 +88,9 @@ namespace FoodApp.Controllers
         }
 
         // get the search page
-
-
-        // post the search page
+        public IActionResult Search()
+        {
+            return View();
+        }
     }
 }
