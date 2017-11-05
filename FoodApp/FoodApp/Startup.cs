@@ -40,7 +40,7 @@ namespace FoodApp
             }
             else
             {
-                //app.UseExceptionHandler("/Food/Error");
+                app.UseExceptionHandler("/Error");
             }
 
             app.UseStaticFiles();

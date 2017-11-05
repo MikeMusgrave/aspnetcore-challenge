@@ -9,7 +9,7 @@ using FoodApp.Validation;
 
 namespace FoodApp.Controllers
 {
-    [Route("api/Food")]
+    [Route("api")]
     [ValidateModel]
     public class ApiController : Controller
     {
@@ -27,7 +27,7 @@ namespace FoodApp.Controllers
         }
 
         // GET all
-        [HttpGet]
+        [HttpGet("Food")]
         [Produces("application/json")]
         public async Task<IEnumerable<FoodItem>> Get()
         {
@@ -41,26 +41,33 @@ namespace FoodApp.Controllers
         }
 
         // GET by guid
-        [HttpGet("{id:Guid}", Name ="GetById")]
+        [HttpGet("Food/{id:Guid}", Name ="GetById")]
         [Produces("application/json")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var item = await _context.FoodItems.FirstOrDefaultAsync(t => t.Id == id);
             if (item == null)
             {
-                return NotFound(id);
+                return NotFound(Json(id));
             }
 
             return new ObjectResult(item);
         }
 
         // POST new from JSON
-        [HttpPost]
+        [HttpPost("Food")]
         [Consumes("application/json")]
         public async Task<IActionResult> Create([FromBody] FoodItem food)
         {
-            _context.FoodItems.Add(food);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.FoodItems.Add(food);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return BadRequest(Json(food));
+            }
 
             return CreatedAtRoute("GetById", new { id = food.Id }, food);
         }
