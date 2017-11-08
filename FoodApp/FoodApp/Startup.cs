@@ -49,7 +49,7 @@ namespace FoodApp
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Food}/{action=List}/{id?}");
+                    template: "{controller=Food}/{action=Index}/{id?}");
             });
 
             // ensure that there is data in the database

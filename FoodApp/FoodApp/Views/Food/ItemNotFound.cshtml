@@ -1,14 +1,14 @@
-﻿@Model = ItemNotFoundViewModel
+﻿@model System.Guid
 
 @{
     Layout = "_Layout";
-    ViewData["Title"] = "ItemNotFound";
+    ViewData["Title"] = "Food Item Not Found";
 }
 
 <div class="panel panel-success">
     <div class="panel-heading text-center"><h4>No Food Items Found</h4></div>
     <div class="panel-body">
-        No food items were found using the provided Id.
+        No food items were found using @Model.ToString().
     </div>
 </div>
 

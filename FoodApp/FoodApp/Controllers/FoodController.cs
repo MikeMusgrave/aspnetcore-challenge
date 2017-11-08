@@ -16,8 +16,8 @@ namespace FoodApp.Controllers
             _context = context;
         }
 
-        // GET: List
-        public async Task<IActionResult> List() {
+        // GET: Food
+        public async Task<IActionResult> Index() {
             // get food items from db
             var foodItems = from f in _context.FoodItems select f;
 
@@ -27,13 +27,13 @@ namespace FoodApp.Controllers
             return View(await foodItems.ToListAsync());
         }
 
-        // GET: List/Details/<guid>
+        // GET: Food/Details/<guid>
         public async Task<IActionResult> Details(Guid? id)
         {
             // check for passed value
             if (id == null)
             {
-                return View("ItemNotFound");
+                return View("ItemNotFound", id);
             }
 
             // get food item
@@ -42,7 +42,7 @@ namespace FoodApp.Controllers
             // if food item is empty exit
             if (food == null)
             {
-                return View("ItemNotFound");
+                return View("ItemNotFound", id);
             }
 
             // everything is good, show the food item's details
@@ -50,13 +50,13 @@ namespace FoodApp.Controllers
 
         }
 
-        // GET: List/Add
+        // GET: Food/Add
         public IActionResult Add()
         {
             return View();
         }
 
-        // POST: List/Create
+        // POST: Food/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add([Bind("Name, Rating, URL, Email")]FoodItem foodItem)
@@ -76,7 +76,7 @@ namespace FoodApp.Controllers
                 }
 
                 // show list
-                //return RedirectToAction("List");
+                //return RedirectToAction(nameof(Index));
                 return RedirectToAction("Details", new { id = foodItem.Id });
             }
             else
@@ -86,20 +86,20 @@ namespace FoodApp.Controllers
             }
         }
 
-        // GET: List/Search
+        // GET: Food/Search
         public IActionResult Search()
         {
             return View();
         }
 
-        // GET: List/Edit/<guid>
+        // GET: Food/Edit/<guid>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, [Bind("Id, Name, Rating, URL, Email")] FoodItem foodItem)
         {
             if (id != foodItem.Id)
             {
-                return View("ItemNotFound");
+                return View("ItemNotFound", id);
             }
 
             if (ModelState.IsValid)
@@ -113,7 +113,7 @@ namespace FoodApp.Controllers
                 {
                     if (!FoodItemExists(foodItem.Id))
                     {
-                        return NotFound();
+                        return View("ItemNotFound", id);
                     }
                     else
                     {
@@ -125,24 +125,24 @@ namespace FoodApp.Controllers
             return View(foodItem);
         }
 
-        // GET: List/Delete/<guid>
+        // GET: Food/Delete/<guid>
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
-                return View("ItemNotFound");
+                return View("ItemNotFound", id);
             }
 
             var foodItem = await _context.FoodItems.SingleOrDefaultAsync(f => f.Id == id);
             if (foodItem == null)
             {
-                return View("ItemNotFound");
+                return View("ItemNotFound", id);
             }
 
             return View(foodItem);
         }
 
-        // POST: List/Delete/<guid>
+        // POST: Food/Delete/<guid>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
@@ -150,7 +150,7 @@ namespace FoodApp.Controllers
             var food = await _context.FoodItems.SingleOrDefaultAsync(f => f.Id == id);
             _context.FoodItems.Remove(food);
             await _context.SaveChangesAsync();
-            return RedirectToAction("List");
+            return RedirectToAction(nameof(Index));
         }
 
         private bool FoodItemExists(Guid id)
