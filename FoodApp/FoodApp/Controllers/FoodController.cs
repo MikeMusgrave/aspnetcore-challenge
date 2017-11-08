@@ -16,7 +16,7 @@ namespace FoodApp.Controllers
             _context = context;
         }
 
-        // get the main list page
+        // GET: List
         public async Task<IActionResult> List() {
             // get food items from db
             var foodItems = from f in _context.FoodItems select f;
@@ -27,20 +27,17 @@ namespace FoodApp.Controllers
             return View(await foodItems.ToListAsync());
         }
 
-        // get the details page
-        [HttpGet]
-        public async Task<IActionResult> Details(string id)
+        // GET: List/Details/<guid>
+        public async Task<IActionResult> Details(Guid? id)
         {
             // check for passed value
-            if (String.IsNullOrEmpty(id))
+            if (id == null)
             {
                 return View("ItemNotFound");
             }
 
-            Guid.TryParse(id, out Guid guid);
-            
             // get food item
-            var food = await _context.FoodItems.SingleOrDefaultAsync(f => f.Id == guid);
+            var food = await _context.FoodItems.SingleOrDefaultAsync(f => f.Id == id);
             
             // if food item is empty exit
             if (food == null)
@@ -53,13 +50,13 @@ namespace FoodApp.Controllers
 
         }
 
-        // get the add page
+        // GET: List/Add
         public IActionResult Add()
         {
             return View();
         }
 
-        // post the add page
+        // POST: List/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add([Bind("Name, Rating, URL, Email")]FoodItem foodItem)
@@ -89,10 +86,76 @@ namespace FoodApp.Controllers
             }
         }
 
-        // get the search page
+        // GET: List/Search
         public IActionResult Search()
         {
             return View();
+        }
+
+        // GET: List/Edit/<guid>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id, Name, Rating, URL, Email")] FoodItem foodItem)
+        {
+            if (id != foodItem.Id)
+            {
+                return View("ItemNotFound");
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(foodItem);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!FoodItemExists(foodItem.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("Details", new { id = foodItem.Id });
+            }
+            return View(foodItem);
+        }
+
+        // GET: List/Delete/<guid>
+        public async Task<IActionResult> Delete(Guid? id)
+        {
+            if (id == null)
+            {
+                return View("ItemNotFound");
+            }
+
+            var foodItem = await _context.FoodItems.SingleOrDefaultAsync(f => f.Id == id);
+            if (foodItem == null)
+            {
+                return View("ItemNotFound");
+            }
+
+            return View(foodItem);
+        }
+
+        // POST: List/Delete/<guid>
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        {
+            var food = await _context.FoodItems.SingleOrDefaultAsync(f => f.Id == id);
+            _context.FoodItems.Remove(food);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("List");
+        }
+
+        private bool FoodItemExists(Guid id)
+        {
+            return _context.FoodItems.Any(f => f.Id == id);
         }
     }
 }
