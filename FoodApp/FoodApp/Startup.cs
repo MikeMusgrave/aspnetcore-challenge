@@ -51,9 +51,6 @@ namespace FoodApp
                     name: "default",
                     template: "{controller=Food}/{action=Index}/{id?}");
             });
-
-            // ensure that there is data in the database
-            SeedData.EnsurePopulated(app);
         }
     }
 }

@@ -1,24 +1,19 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FoodApp.Models
 {
     public static class SeedData
     {
-        public static void EnsurePopulated(IApplicationBuilder app)
+        public static void PopulateDb(IServiceProvider serviceProvider)
         {
-            // kept getting an error here...found this to help
-            // https://stackoverflow.com/questions/46063945/cannot-resolve-dbcontext-in-asp-net-core-2-0
-
-            using (var serviceScope = app.ApplicationServices.CreateScope())
-            {
-                FoodDbContext _context = serviceScope.ServiceProvider.GetService<FoodDbContext>();
-
-                if (!_context.FoodItems.Any())
+            using (var context = new FoodDbContext(serviceProvider.GetRequiredService<DbContextOptions<FoodDbContext>>()))
+            { 
+                if (!context.FoodItems.Any())
                 {
-                    _context.FoodItems.AddRange(
+                    context.FoodItems.AddRange(
                         new FoodItem
                         {
                             Name = "Apple",
@@ -69,7 +64,7 @@ namespace FoodApp.Models
                             URL = "https://ichef.bbci.co.uk/news/660/media/images/75904000/jpg/_75904921_154311347.jpg"
                         }
                     );
-                    _context.SaveChanges();
+                    context.SaveChanges();
                 }
             }
         }
